@@ -10,11 +10,15 @@ options.add_argument('-disable-dev-shm-usage')
 driver = webdriver.Chrome(options=options)
 
 driver.get("https://tiki.vn/")
+cats = driver.find_elements(By.CLASS_NAME,"cjqkgR")[1].find_elements(By.TAG_NAME,"a")
+catDict = {cat.get_attribute("href"):cat.get_attribute("textContent") for cat in cats}
+for key,val in catDict.items():
+    print(key,val)
 
 
-prodList = []
 
 def getProduct(prod):
+    cat = val
     name = prod.find_element(By.CLASS_NAME,"name").get_attribute("textContent")
     rating = prod.find_element(By.CLASS_NAME,"full-rating").get_attribute("textContent")
     sold = prod.find_element(By.CLASS_NAME,"fCfYNm").get_attribute("textContent").replace("Đã bán ","")
@@ -29,8 +33,7 @@ def getProduct(prod):
     else:
         verify = None
     deliStatus = prod.find_element(By.CLASS_NAME,"badge-delivery").get_attribute("textContent")
-    return {"name":name,"image":img,"price":price,"sold":sold,"rating":rating,"verify":verify,
+    return {"name":name,"category":cat,"image":img,"price":price,"sold":sold,"rating":rating,"verify":verify,
               "discount":discount,"delivery_status":deliStatus}
-prod = driver.find_elements(By.CLASS_NAME,"product-item")[0]
 
-print(getProduct(prod))
+
