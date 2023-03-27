@@ -19,7 +19,7 @@ driver = webdriver.Chrome(options=options)
 
 
 val = "mevabe"
-def getProduct(prod):
+def get_product(prod):
     cat = val
     name = prod.find_element(By.CLASS_NAME,"name").get_attribute("textContent")
     rating = prod.find_elements(By.CLASS_NAME,"full-rating")
@@ -41,19 +41,18 @@ def getProduct(prod):
         verify = prod.find_element(By.CLASS_NAME,"thumbnail").find_element(By.TAG_NAME,"img").get_attribute('alt')
     else:
         verify = None
-    deliStatus = prod.find_element(By.CLASS_NAME,"badge-delivery").get_attribute("textContent")
+    delivery_status = prod.find_element(By.CLASS_NAME,"badge-delivery").get_attribute("textContent")
     return {"name":name,"category":cat,"image":img,"price":price,"sold":sold,"rating":rating,"verify":verify,
-              "discount":discount,"delivery_status":deliStatus}
+              "discount":discount,"delivery_status":delivery_status}
 
-def getListsProduct(link):
+def get_list_product(link):
     driver.get(link)
     sleep(1)
-    prodList = []
+    product_list = []
     prods = driver.find_elements(By.CLASS_NAME,"product-item")
     for i in range(150):
         driver.execute_script("window.scrollTo(0, window.scrollY + 20)")
     for prod in prods:
-        prodList.append(getProduct(prod))
-    return prodList
-
-print(getListsProduct("https://tiki.vn/san-pham-tai-chinh-bao-hiem/c54042"))
+        product_list.append(get_product(prod))
+    return product_list
+print(get_list_product("https://tiki.vn/san-pham-tai-chinh-bao-hiem/c54042"))
